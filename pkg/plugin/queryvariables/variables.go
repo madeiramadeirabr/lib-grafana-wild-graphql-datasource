@@ -3,9 +3,11 @@ package queryvariables
 import (
 	"encoding/json"
 	"fmt"
+	"reflect"
+	"time"
+
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
 	"github.com/grafana/grafana-plugin-sdk-go/backend/log"
-	"reflect"
 )
 
 func AutoPopulateVariables(query backend.DataQuery, variables map[string]interface{}) {
@@ -20,6 +22,8 @@ func AutoPopulateVariables(query backend.DataQuery, variables map[string]interfa
 
 	variables["from"] = query.TimeRange.From.UnixMilli()
 	variables["to"] = query.TimeRange.To.UnixMilli()
+	variables["fromISO"] = query.TimeRange.From.UTC().Format(time.RFC3339)
+	variables["toISO"] = query.TimeRange.To.UTC().Format(time.RFC3339)
 	variables["interval_ms"] = query.Interval.Milliseconds()
 	variables["maxDataPoints"] = query.MaxDataPoints
 	variables["refId"] = query.RefID
