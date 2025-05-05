@@ -1,4 +1,4 @@
-# Wild GraphQL Data Source
+# Wild GraphQL Data Source (MadeiraMadeira Version)
 
 [![](https://img.shields.io/github/stars/wildmountainfarms/wild-graphql-datasource.svg?style=social)](https://github.com/wildmountainfarms/wild-graphql-datasource)
 [![](https://img.shields.io/github/v/release/wildmountainfarms/wild-graphql-datasource.svg)](https://github.com/wildmountainfarms/wild-graphql-datasource/releases)
@@ -137,7 +137,7 @@ The results you see in here are separate from allowing Grafana to query the data
 ### Operation Name
 
 The operation name is displayed right below the GraphiQL editor.
-The operation name should be automatically determined by Wild GraphQL Data Source.
+The operation name should be automatically determined by Wild GraphQL Data Source (MadeiraMadeira version).
 If you define multiple queries in the query pane, you may have to manually specify this.
 This is also automatically updated after running a query using the "Execute query" button.
 
@@ -297,7 +297,7 @@ What could have taken two queries, you now have done in a single query!
 
 ### Using Grafana Transformations
 
-It's worth documenting that it's entirely possible to not use the labels feature of Wild GraphQL Data Source,
+It's worth documenting that it's entirely possible to not use the labels feature of Wild GraphQL Data Source (MadeiraMadeira version),
 and use Grafana transformations for some of the same functionality.
 
 If you have data that needs to be "grouped by" or "partitioned by", you first need to add "Partition by values"
@@ -372,7 +372,7 @@ apiVersion: 1
 
 datasources:
   - name: 'My Cool GraphQL Datasource Name'
-    type: 'retrodaredevil-wildgraphql-datasource'
+    type: 'madeiramadeira-wildgraphql-datasource'
     url: 'https://swapi-graphql.netlify.app/graphql'
     access: proxy
     isDefault: false

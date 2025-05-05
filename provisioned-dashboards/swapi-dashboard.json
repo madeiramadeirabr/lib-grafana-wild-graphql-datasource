@@ -23,7 +23,7 @@
   "panels": [
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "${datasource}"
       },
       "fieldConfig": {
@@ -79,7 +79,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "${datasource}"
           },
           "parsingOptions": [
@@ -96,7 +96,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "${datasource}"
       },
       "fieldConfig": {
@@ -152,7 +152,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "${datasource}"
           },
           "parsingOptions": [
@@ -169,7 +169,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "${datasource}"
       },
       "fieldConfig": {
@@ -222,7 +222,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "${datasource}"
           },
           "parsingOptions": [
@@ -244,7 +244,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "${datasource}"
       },
       "description": "This shows the populations of different planets. It is also a great test to understand what happens when the GraphQL response emits null values. Wild GraphQL datasource currently has logic to remove any entry with a null value in one of its fields.",
@@ -325,7 +325,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "${datasource}"
           },
           "parsingOptions": [
@@ -362,7 +362,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "${datasource}"
       },
       "fieldConfig": {
@@ -416,7 +416,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "${datasource}"
           },
           "parsingOptions": [
@@ -449,7 +449,7 @@
         "multi": false,
         "name": "datasource",
         "options": [],
-        "query": "retrodaredevil-wildgraphql-datasource",
+        "query": "madeiramadeira-wildgraphql-datasource",
         "queryValue": "",
         "refresh": 1,
         "regex": "",
