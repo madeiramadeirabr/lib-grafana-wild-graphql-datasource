@@ -5,7 +5,7 @@ set -e
 mage -v
 npm run build
 
-PLUGIN_ID="retrodaredevil-wildgraphql-datasource"
+PLUGIN_ID="madeiramadeira-wildgraphql-datasource"
 PACKAGE_DIR="package"
 ZIP_NAME="$PACKAGE_DIR/$PLUGIN_ID.zip"
 
