@@ -113,7 +113,11 @@ func (d *Datasource) query(ctx context.Context, req *backend.QueryDataRequest, q
 	}
 
 	// use later: pCtx.AppInstanceSettings.DecryptedSecureJSONData
-	variables, _ := queryvariables.ParseVariables(query, qm.Variables)
+	var jsonData JSONData
+	if err := json.Unmarshal(d.settings.JSONData, &jsonData); err != nil {
+		jsonData.UseISODates = false
+	}
+	variables, _ := queryvariables.ParseVariables(query, qm.Variables, jsonData.UseISODates)
 
 	graphQLRequest := graphql.Request{
 		Query:         qm.QueryText,
@@ -262,4 +266,8 @@ func (d *Datasource) CheckHealth(ctx context.Context, req *backend.CheckHealthRe
 		Status:  backend.HealthStatusOk,
 		Message: "Success",
 	}, nil
+}
+
+type JSONData struct {
+	UseISODates bool `json:"useISODates"`
 }
