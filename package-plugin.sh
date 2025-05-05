@@ -2,8 +2,16 @@
 
 set -e
 
-mage -v
+# Install dependencies
+npm ci
+
+# Build frontend
 npm run build
+
+# Build backend if it exists
+if [ -f "Magefile.go" ]; then
+  mage -v buildAll
+fi
 
 PLUGIN_ID="madeiramadeira-wildgraphql-datasource"
 PACKAGE_DIR="package"
