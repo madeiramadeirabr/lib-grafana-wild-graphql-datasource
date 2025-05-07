@@ -84,7 +84,6 @@ func ParseVariables(query backend.DataQuery, rawVariables interface{}, useISODat
 			// continue executing query without interpolated variables
 			// TODO consider if we want a flag in the options to prevent the query from continuing further in the case of an error
 		}
-		ensureTimeFormat(variables, useISODates)
 	case map[string]interface{}:
 		// This case happens when the frontend is able to interpolate the variables before passing them to us
 		//   or happens when someone has directly configured the variables option in the JSON itself
@@ -93,13 +92,13 @@ func ParseVariables(query backend.DataQuery, rawVariables interface{}, useISODat
 		for key, value := range typedRawVariables {
 			variables[key] = value
 		}
-		ensureTimeFormat(variables, useISODates)
 	case nil:
 		// do nothing
 	default:
 		noErrors = false
 		log.DefaultLogger.Error(fmt.Sprintf("Unable to parse variables for ref ID: %s. Type is %v", query.RefID, reflect.TypeOf(rawVariables)))
 	}
+	ensureTimeFormat(variables, useISODates)
 
 	return variables, noErrors
 }
