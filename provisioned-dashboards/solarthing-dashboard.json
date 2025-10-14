@@ -15,7 +15,7 @@
       },
       {
         "datasource": {
-          "type": "retrodaredevil-wildgraphql-datasource",
+          "type": "madeiramadeira-wildgraphql-datasource",
           "uid": "${datasource}"
         },
         "enable": true,
@@ -48,7 +48,7 @@
       },
       {
         "datasource": {
-          "type": "retrodaredevil-wildgraphql-datasource",
+          "type": "madeiramadeira-wildgraphql-datasource",
           "uid": "${datasource}"
         },
         "enable": true,
@@ -94,7 +94,7 @@
   "panels": [
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "${datasource}"
       },
       "description": "",
@@ -175,7 +175,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "${datasource}"
           },
           "parsingOptions": [
@@ -213,7 +213,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "${datasource}"
       },
       "description": "A reading of temperatures. \n\nNote that the values displayed here are not affected by the currently selected Source ID",
@@ -294,7 +294,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "${datasource}"
           },
           "parsingOptions": [
@@ -380,7 +380,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "${datasource}"
       },
       "fieldConfig": {
@@ -440,7 +440,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "${datasource}"
           },
           "parsingOptions": [
@@ -463,7 +463,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "${datasource}"
       },
       "fieldConfig": {
@@ -530,7 +530,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "${datasource}"
           },
           "parsingOptions": [
@@ -553,7 +553,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "${datasource}"
       },
       "fieldConfig": {
@@ -613,7 +613,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "${datasource}"
           },
           "parsingOptions": [
@@ -636,7 +636,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "${datasource}"
       },
       "description": "",
@@ -813,7 +813,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "${datasource}"
           },
           "operationName": "BatteryVoltage",
@@ -867,7 +867,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "${datasource}"
       },
       "fieldConfig": {
@@ -931,7 +931,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "${datasource}"
           },
           "parsingOptions": [
@@ -966,7 +966,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "${datasource}"
       },
       "fieldConfig": {
@@ -1047,7 +1047,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "${datasource}"
           },
           "parsingOptions": [
@@ -1087,7 +1087,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "${datasource}"
       },
       "fieldConfig": {
@@ -1151,7 +1151,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "${datasource}"
           },
           "parsingOptions": [
@@ -1211,7 +1211,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "${datasource}"
       },
       "description": "",
@@ -1292,7 +1292,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "${datasource}"
           },
           "parsingOptions": [
@@ -1316,7 +1316,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "${datasource}"
       },
       "description": "The wattage as measured to the input of the charge controllers",
@@ -1464,7 +1464,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "${datasource}"
           },
           "operationName": "BatteryVoltage",
@@ -1518,7 +1518,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "${datasource}"
       },
       "fieldConfig": {
@@ -1600,7 +1600,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "${datasource}"
           },
           "parsingOptions": [
@@ -1651,7 +1651,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "${datasource}"
       },
       "description": "",
@@ -1798,7 +1798,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "${datasource}"
           },
           "parsingOptions": [
@@ -1851,7 +1851,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "${datasource}"
       },
       "description": "A graph of the energy produced by the solar panels. These values reset at the end of the day.",
@@ -1998,7 +1998,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "${datasource}"
           },
           "operationName": "dailyKWHQuery",
@@ -2052,7 +2052,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "${datasource}"
       },
       "description": "",
@@ -2199,7 +2199,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "${datasource}"
           },
           "parsingOptions": [
@@ -2252,7 +2252,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "${datasource}"
       },
       "description": "",
@@ -2399,7 +2399,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "${datasource}"
           },
           "operationName": "GeneratorChargingQuery",
@@ -2453,7 +2453,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "${datasource}"
       },
       "description": "",
@@ -2600,7 +2600,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "${datasource}"
           },
           "parsingOptions": [
@@ -2653,7 +2653,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "${datasource}"
       },
       "description": "",
@@ -2800,7 +2800,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "${datasource}"
           },
           "operationName": "GeneratorBuyingQuery",
@@ -2854,7 +2854,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "${datasource}"
       },
       "fieldConfig": {
@@ -2935,7 +2935,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "${datasource}"
           },
           "parsingOptions": [
@@ -3114,7 +3114,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "${datasource}"
       },
       "description": "",
@@ -3290,7 +3290,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "${datasource}"
           },
           "operationName": "BatteryVoltage",
@@ -3344,7 +3344,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "${datasource}"
       },
       "fieldConfig": {
@@ -3400,7 +3400,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "${datasource}"
           },
           "parsingOptions": [
@@ -3423,7 +3423,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "${datasource}"
       },
       "description": "",
@@ -3599,7 +3599,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "${datasource}"
           },
           "operationName": "BatteryVoltage",
@@ -3653,7 +3653,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "${datasource}"
       },
       "fieldConfig": {
@@ -3709,7 +3709,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "${datasource}"
           },
           "parsingOptions": [
@@ -3728,7 +3728,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "${datasource}"
       },
       "fieldConfig": {
@@ -3809,7 +3809,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "${datasource}"
           },
           "parsingOptions": [
@@ -3864,7 +3864,7 @@
         "multi": false,
         "name": "datasource",
         "options": [],
-        "query": "retrodaredevil-wildgraphql-datasource",
+        "query": "madeiramadeira-wildgraphql-datasource",
         "queryValue": "",
         "refresh": 1,
         "regex": "",

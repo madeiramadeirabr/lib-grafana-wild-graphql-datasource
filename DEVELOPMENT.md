@@ -14,14 +14,14 @@ If you want to test a released, but unsigned plugin, follow this.
 https://grafana.com/docs/grafana/latest/cli/#override-default-plugin-zip-url
 
 ```shell
-grafana cli --pluginUrl https://github.com/wildmountainfarms/wild-graphql-datasource/releases/download/v0.0.6/retrodaredevil-wildgraphql-datasource-0.0.6.zip plugins install retrodaredevil-wildgraphql-datasource
+grafana cli --pluginUrl https://github.com/wildmountainfarms/wild-graphql-datasource/releases/download/v0.0.6/madeiramadeira-wildgraphql-datasource-0.0.6.zip plugins install madeiramadeira-wildgraphql-datasource
 ```
 
 Then update `grafana.ini` with
 
 ```ini
 [plugins]
-allow_loading_unsigned_plugins = retrodaredevil-wildgraphql-datasource
+allow_loading_unsigned_plugins = madeiramadeira-wildgraphql-datasource
 ```
 
 ## Building and Development

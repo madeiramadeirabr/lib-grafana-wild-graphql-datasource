@@ -14,32 +14,40 @@ import {ScopedVars} from "@grafana/data";
  * but we want to reduce the dependency on the frontend here specifically because the backend cannot use {@link getTemplateSrv}.
  * Remember THE VALUES HERE ARE NOT USED BY THE BACKEND AND ARE ONLY USED FOR DEBUGGING QUERIES IN THE FRONTEND BY THE RUN BUTTON.
  */
-const AUTO_POPULATED_VARIABLES: Record<string, (templateSrv: TemplateSrv) => any> = {
-  "from": templateSrv => Number(templateSrv.replace("$__from")),
-  "to": templateSrv => Number(templateSrv.replace("$__to")),
-  // While interval_ms can be obtained via $__interval_ms, but only as a ScopedVar, which we don't have easy access to inside a fetcher
-};
+function getAutoPopulatedVariables(useISODates: boolean): Record<string, (templateSrv: TemplateSrv) => any> {
+  return {
+    "from": (templateSrv) => {
+      const value = templateSrv.replace("$__from");
+      const timestamp = Number(value);
+      return useISODates ? new Date(timestamp).toISOString() : timestamp;
+    },
+    "to": (templateSrv) => {
+      const value = templateSrv.replace("$__to");
+      const timestamp = Number(value);
+      return useISODates ? new Date(timestamp).toISOString() : timestamp;
+    },
+    // While interval_ms can be obtained via $__interval_ms, but only as a ScopedVar, which we don't have easy access to inside a fetcher
+  };
+}
 
 /**
  * This should only be used for client-side only queries, such as the Execute button.
  * Remember that this implementation is not meant to be perfect, but an approximation of how the backend functions
  */
-export function getInterpolatedAutoPopulatedVariables(templateSrv: TemplateSrv): Record<string, any> {
+export function getInterpolatedAutoPopulatedVariables(templateSrv: TemplateSrv, useISODates: boolean): Record<string, any> {
+  const AUTO_POPULATED_VARIABLES = getAutoPopulatedVariables(useISODates);
   const variables: any = {};
   for (const variableName in AUTO_POPULATED_VARIABLES) {
     const func = AUTO_POPULATED_VARIABLES[variableName];
     const result = func(templateSrv);
-    if (isNaN(result)) {
+    if (!useISODates && isNaN(result)) {
       console.error("Could not add interpolation for variable: " + variableName + ". Will not pass as a variable.");
     } else {
       variables[variableName] = result;
     }
   }
-
   return variables;
 }
-
-
 
 function doInterpolate(object: any, templateSrv: TemplateSrv, scopedVars?: ScopedVars): any {
   switch (typeof object) {

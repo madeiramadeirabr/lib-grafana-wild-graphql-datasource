@@ -56,7 +56,7 @@ const INPUT_WIDTH = 48;
  * One key difference here is that it is expected that all variables populated automatically by the backend
  * are also automatically populated by this method, using
  */
-function createFetcher(url: string, withCredentials: boolean, basicAuth?: string): Fetcher  {
+function createFetcher(url: string, withCredentials: boolean, basicAuth?: string, useISODates = false): Fetcher  {
   const headers: Record<string, any> = {
     Accept: 'application/json',
     'Content-Type': 'application/json',
@@ -71,7 +71,7 @@ function createFetcher(url: string, withCredentials: boolean, basicAuth?: string
   const templateSrv = getTemplateSrv();
   return async (graphQLParams: FetcherParams, opts?: FetcherOpts) => {
     const variables = {
-      ...getInterpolatedAutoPopulatedVariables(templateSrv),
+      ...getInterpolatedAutoPopulatedVariables(templateSrv, useISODates),
       ...interpolateVariables(graphQLParams.variables, templateSrv), // remember one of the downsides here is that we cannot pass scopedVars here because we don't have access to it
     };
     const query = {
@@ -100,9 +100,10 @@ export function QueryEditor(props: Props) {
     return createFetcher(
       datasource.settings.url!,
       datasource.settings.withCredentials ?? false,
-      datasource.settings.basicAuth
+      datasource.settings.basicAuth,
+      datasource.settings.jsonData.useISODates
     );
-  }, [datasource.settings.url, datasource.settings.withCredentials, datasource.settings.basicAuth]);
+  }, [datasource.settings.url, datasource.settings.withCredentials, datasource.settings.basicAuth, datasource.settings.jsonData.useISODates]);
 
   // *sometimes* and only sometimes when creating a new panel the query won't be populated with the default query.
   //   When that happens any assumption we make about the presence of fields of query, we get an NPE.

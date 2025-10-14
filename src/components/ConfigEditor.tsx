@@ -1,5 +1,5 @@
 import React from 'react';
-import {DataSourceHttpSettings} from '@grafana/ui';
+import {DataSourceHttpSettings, Field, InlineField, InlineSwitch} from '@grafana/ui';
 import {DataSourcePluginOptionsEditorProps} from '@grafana/data';
 import {WildGraphQLDataSourceOptions} from '../types';
 
@@ -7,6 +7,19 @@ interface Props extends DataSourcePluginOptionsEditorProps<WildGraphQLDataSource
 
 export function ConfigEditor(props: Props) {
   const { onOptionsChange, options } = props;
+
+  const { jsonData } = options;
+
+  const onToggleChange = (event: React.FormEvent<HTMLInputElement>) => {
+    const value = event.currentTarget.checked;
+    onOptionsChange({
+      ...options,
+      jsonData: {
+        ...jsonData,
+        useISODates: value,
+      },
+    });
+  };
   // const onPathChange = (event: ChangeEvent<HTMLInputElement>) => {
   //   const jsonData = {
   //     ...options.jsonData,
@@ -24,6 +37,7 @@ export function ConfigEditor(props: Props) {
   //     },
   //   });
   // };
+
 
   // const onResetAPIKey = () => {
   //   onOptionsChange({
@@ -49,6 +63,19 @@ export function ConfigEditor(props: Props) {
         dataSourceConfig={options}
         onChange={onOptionsChange}
       />
+
+      <InlineField
+        label="Use ISO 8601 for time"
+        tooltip="When enabled, $__from and $__to variables will be in ISO 8601 format instead of Unix timestamp"
+        labelWidth={24}
+      >
+        <Field>
+          <InlineSwitch
+            value={jsonData.useISODates || false}
+            onChange={onToggleChange}
+          />
+        </Field>
+      </InlineField>
 
       {/*<InlineField label="API Key" labelWidth={12}>*/}
       {/*  <SecretInput*/}

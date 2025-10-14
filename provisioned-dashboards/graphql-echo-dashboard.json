@@ -36,7 +36,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "a91208a2-644b-4177-aa96-08389eb61e32"
       },
       "fieldConfig": {
@@ -92,7 +92,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "a91208a2-644b-4177-aa96-08389eb61e32"
           },
           "parsingOptions": [
@@ -134,7 +134,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "a91208a2-644b-4177-aa96-08389eb61e32"
       },
       "fieldConfig": {
@@ -190,7 +190,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "a91208a2-644b-4177-aa96-08389eb61e32"
           },
           "parsingOptions": [
@@ -209,7 +209,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "a91208a2-644b-4177-aa96-08389eb61e32"
       },
       "description": "Note: The labels do not appear correctly on Grafana 9.3",
@@ -292,7 +292,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "a91208a2-644b-4177-aa96-08389eb61e32"
           },
           "parsingOptions": [
@@ -329,7 +329,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "a91208a2-644b-4177-aa96-08389eb61e32"
       },
       "description": "Note: The labels do not appear correctly on Grafana 9.3\n\nThis tests whether specifying data paths containing arrays and indexing into them works.\n\nBecause this is the first node only, we expect the temperatures between the processors to all be pretty similar.",
@@ -412,7 +412,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "a91208a2-644b-4177-aa96-08389eb61e32"
           },
           "parsingOptions": [
@@ -448,7 +448,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "a91208a2-644b-4177-aa96-08389eb61e32"
       },
       "description": "Same as the above graph, except it uses Wild GraphQL labels.\n\nThis tests the \"Frame exclude\" feature of labels.",
@@ -812,7 +812,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "a91208a2-644b-4177-aa96-08389eb61e32"
           },
           "parsingOptions": [
@@ -880,7 +880,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "a91208a2-644b-4177-aa96-08389eb61e32"
       },
       "description": "In this query we set the data path to point to an element that is not an object or an array. We expect an error to occur",
@@ -938,7 +938,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "a91208a2-644b-4177-aa96-08389eb61e32"
           },
           "parsingOptions": [
@@ -958,7 +958,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "a91208a2-644b-4177-aa96-08389eb61e32"
       },
       "description": "In this query we set the data path to point to an array, and incorrectly attempt to use \"a\" to index into that array, causing an integer parsing error.",
@@ -1016,7 +1016,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "a91208a2-644b-4177-aa96-08389eb61e32"
           },
           "parsingOptions": [
@@ -1036,7 +1036,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "a91208a2-644b-4177-aa96-08389eb61e32"
       },
       "fieldConfig": {
@@ -1092,7 +1092,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "a91208a2-644b-4177-aa96-08389eb61e32"
           },
           "parsingOptions": [
@@ -1133,7 +1133,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "a91208a2-644b-4177-aa96-08389eb61e32"
       },
       "description": "In this query we set the data path to something that does not exist.",
@@ -1191,7 +1191,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "a91208a2-644b-4177-aa96-08389eb61e32"
           },
           "parsingOptions": [
@@ -1211,7 +1211,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "a91208a2-644b-4177-aa96-08389eb61e32"
       },
       "description": "In this query we set the data path to point to an array, and incorrect index using a negative integer",
@@ -1269,7 +1269,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "a91208a2-644b-4177-aa96-08389eb61e32"
           },
           "parsingOptions": [
@@ -1289,7 +1289,7 @@
     },
     {
       "datasource": {
-        "type": "retrodaredevil-wildgraphql-datasource",
+        "type": "madeiramadeira-wildgraphql-datasource",
         "uid": "a91208a2-644b-4177-aa96-08389eb61e32"
       },
       "description": "In this query we set the data path to point to an array, and incorrectly index that array using a value we expect to be out of bounds",
@@ -1347,7 +1347,7 @@
       "targets": [
         {
           "datasource": {
-            "type": "retrodaredevil-wildgraphql-datasource",
+            "type": "madeiramadeira-wildgraphql-datasource",
             "uid": "a91208a2-644b-4177-aa96-08389eb61e32"
           },
           "parsingOptions": [
@@ -1378,7 +1378,7 @@
           "value": "host"
         },
         "datasource": {
-          "type": "retrodaredevil-wildgraphql-datasource",
+          "type": "madeiramadeira-wildgraphql-datasource",
           "uid": "a91208a2-644b-4177-aa96-08389eb61e32"
         },
         "definition": "",
