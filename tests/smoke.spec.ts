@@ -6,7 +6,7 @@ test(
   'smoke: datasource config page loads',
   { tag: '@plugins' },
   async ({ createDataSourceConfigPage, page }) => {
-    await createDataSourceConfigPage({ type: 'retrodaredevil-wildgraphql-datasource' });
+    await createDataSourceConfigPage({ type: 'madeiramadeira-wildgraphql-datasource' });
     await expect(
       page.getByText('Wild GraphQL Data Source').first(),
     ).toBeVisible();

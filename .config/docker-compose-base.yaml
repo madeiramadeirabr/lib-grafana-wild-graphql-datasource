@@ -1,7 +1,7 @@
 services:
   grafana:
     user: root
-    container_name: 'retrodaredevil-wildgraphql-datasource'
+    container_name: 'madeiramadeira-wildgraphql-datasource'
 
     build:
       context: .
@@ -19,13 +19,13 @@ services:
     cap_add:
       - SYS_PTRACE
     volumes:
-      - ../dist:/var/lib/grafana/plugins/retrodaredevil-wildgraphql-datasource
+      - ../dist:/var/lib/grafana/plugins/madeiramadeira-wildgraphql-datasource
       - ../provisioning:/etc/grafana/provisioning
-      - ..:/root/retrodaredevil-wildgraphql-datasource
+      - ..:/root/madeiramadeira-wildgraphql-datasource
 
     environment:
       NODE_ENV: development
-      GF_LOG_FILTERS: plugin.retrodaredevil-wildgraphql-datasource:debug
+      GF_LOG_FILTERS: plugin.madeiramadeira-wildgraphql-datasource:debug
       GF_LOG_LEVEL: debug
       GF_DATAPROXY_LOGGING: 1
-      GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: retrodaredevil-wildgraphql-datasource
+      GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: madeiramadeira-wildgraphql-datasource
