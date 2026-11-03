@@ -113,6 +113,7 @@ export type WildGraphQLAnyQuery = (WildGraphQLMainQuery | WildGraphQLAnnotationQ
 export interface WildGraphQLDataSourceOptions extends DataSourceJsonData {
   keepCookies?: string[];
   timeout?: number;
+  useISODates?: boolean;
 }
 
 /**
