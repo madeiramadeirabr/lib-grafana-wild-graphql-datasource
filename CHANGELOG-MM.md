@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.2-sp.2](https://github.com/madeiramadeirabr/lib-grafana-wild-graphql-datasource/compare/v1.7.2-sp.1...v1.7.2-sp.2) (2026-11-03)
+
+
+### Bug Fixes
+
+* **ci:** limite de memória do Grafana no e2e de 1G para 2G [PLATFORM-18099] ([d3c500e](https://github.com/madeiramadeirabr/lib-grafana-wild-graphql-datasource/commit/d3c500e94ba77d4d491fd19dc56acbc87958a665))
+
 ## [1.7.2-sp.1](https://github.com/madeiramadeirabr/lib-grafana-wild-graphql-datasource/compare/v1.7.2...v1.7.2-sp.1) (2026-11-03)
 
 
