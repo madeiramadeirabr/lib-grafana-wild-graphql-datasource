@@ -38,7 +38,7 @@ jobs:
   build-plugin:
     needs: release-please
     if: ${{ always() && (needs.release-please.outputs.release_created == 'true' || github.event_name == 'workflow_dispatch') }}
-    # O build do frontend (webpack + typecheck) estoura a memória do runner padrão.
+    # Runner maior: o build do frontend (webpack) é pesado.
     runs-on:
       - codebuild-madeiramadeira-${{ github.run_id }}-${{ github.run_attempt }}
       - instance-size:large
@@ -50,20 +50,45 @@ jobs:
           ref: ${{ env.TAG }}
           persist-credentials: false
 
-      # Sem policy_token: o plugin sai sem assinatura (o ID madeiramadeira-* não é assinado pela Grafana),
-      # e o Grafana precisa dele em allow_loading_unsigned_plugins.
-      - uses: grafana/plugin-actions/package-plugin@package-plugin/v2.0.1
-        id: package
-        env:
-          PLUGIN_VALIDATOR_OSV_CONFIG: ${{ github.workspace }}/osv-scanner.toml
+      # Mesmos passos do job "Build, lint and unit tests" do ci.yml, que passa neste runner.
+      # (grafana/plugin-actions/package-plugin morria sem mensagem logo após o webpack.)
+      # Sem assinatura: o ID madeiramadeira-* não é assinado pela Grafana, e o Grafana
+      # precisa dele em allow_loading_unsigned_plugins.
+      - uses: actions/setup-node@v7.1.0
         with:
-          go-version: '1.27.3'
           node-version: '24'
+          cache: 'npm'
+
+      - name: Build frontend
+        run: |
+          npm ci
+          npm run build
+
+      - uses: actions/setup-go@v7.0.0
+        with:
+          go-version-file: go.mod
+
+      - name: Build backend
+        uses: magefile/mage-action@v4.0.0
+        with:
+          version: latest
+          args: buildAll
+
+      - name: Empacota o plugin (zip + sha1)
+        id: package
+        run: |
+          id=$(node -p "require('./dist/plugin.json').id")
+          version=$(node -p "require('./dist/plugin.json').info.version")
+          if [ "v${version}" != "${TAG}" ]; then echo "Versão do plugin (v${version}) difere da tag (${TAG})"; exit 1; fi
+          archive="${id}-${version}.zip"
+          mv dist "${id}"
+          zip -qr "${archive}" "${id}"
+          sha1sum "${archive}" | cut -f1 -d' ' > "${archive}.sha1"
+          echo "archive=${archive}" >> "$GITHUB_OUTPUT"
 
       - name: Anexa o zip e o sha1 à release
-        run: gh release upload "$TAG" "$ARCHIVE" "$ARCHIVE_SHA1" --clobber
+        run: gh release upload "$TAG" "$ARCHIVE" "$ARCHIVE.sha1" --clobber
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           ARCHIVE: ${{ steps.package.outputs.archive }}
-          ARCHIVE_SHA1: ${{ steps.package.outputs.archive-sha1sum }}
