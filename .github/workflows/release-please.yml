@@ -1,7 +1,7 @@
-# Versionamento do fork: X.Y.Z-mm.N, onde X.Y.Z é a versão do upstream (wildmountainfarms/wild-graphql-datasource)
-# e mm.N conta as releases da MadeiraMadeira sobre ela.
-#   - Commits nossos (fix/feat/...) sobem só o N: 1.7.2-mm.1 -> 1.7.2-mm.2
-#   - Ao sincronizar com uma versão nova do upstream, use no commit o rodapé "Release-As: 1.8.0-mm.1"
+# Versionamento do fork: X.Y.Z-sp.N (versioning "service-pack" do release-please), onde X.Y.Z é a versão
+# do upstream (wildmountainfarms/wild-graphql-datasource) e sp.N conta as releases da MadeiraMadeira sobre ela.
+#   - Qualquer release nossa sobe só o N, seja qual for o tipo de commit: 1.7.2-sp.1 -> 1.7.2-sp.2
+#   - Ao sincronizar com uma versão nova do upstream, use no commit o rodapé "Release-As: 1.8.0-sp.1"
 #
 # O build do zip roda aqui mesmo: releases criadas com o GITHUB_TOKEN não disparam outros workflows.
 name: Release Please

@@ -5,9 +5,7 @@
     ".": {
       "release-type": "node",
       "package-name": "madeiramadeira-wildgraphql-datasource",
-      "versioning": "prerelease",
-      "prerelease": true,
-      "prerelease-type": "mm",
+      "versioning": "service-pack",
       "include-component-in-tag": false,
       "changelog-path": "CHANGELOG-MM.md"
     }
