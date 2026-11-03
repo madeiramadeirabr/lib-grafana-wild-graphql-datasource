@@ -12,7 +12,8 @@ services:
       resources:
         limits:
           cpus: "2.0"
-          memory: 1024M
+          # Grafana 13 chega a 1024M durante o e2e; com 1G o container caía no CI (ERR_CONNECTION_REFUSED).
+          memory: 2048M
         reservations:
           cpus: "0.75"
           memory: 256M
