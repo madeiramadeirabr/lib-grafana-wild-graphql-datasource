@@ -161,6 +161,8 @@ jobs:
       matrix:
         GRAFANA_IMAGE: ${{fromJson(needs.resolve-versions.outputs.matrix)}}
     name: e2e test ${{ matrix.GRAFANA_IMAGE.name }}@${{ matrix.GRAFANA_IMAGE.VERSION }}
+    # nightly é o main da Grafana (instável): roda e aparece, mas não reprova o workflow.
+    continue-on-error: ${{ matrix.GRAFANA_IMAGE.VERSION == 'nightly' }}
     # Grafana 13 + Chromium + Playwright não cabem com folga no runner padrão.
     runs-on:
       - codebuild-madeiramadeira-${{ github.run_id }}-${{ github.run_attempt }}
