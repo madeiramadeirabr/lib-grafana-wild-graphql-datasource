@@ -10,6 +10,12 @@ on:
   push:
     branches:
       - main
+  # Reconstrói e anexa o zip a uma release já existente (ex.: o build falhou depois da release ser criada).
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag da release (ex.: v1.7.2-sp.1)'
+        required: true
 
 permissions:
   contents: write
@@ -17,6 +23,7 @@ permissions:
 
 jobs:
   release-please:
+    if: ${{ github.event_name == 'push' }}
     runs-on: codebuild-madeiramadeira-${{ github.run_id }}-${{ github.run_attempt }}
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
@@ -30,12 +37,17 @@ jobs:
 
   build-plugin:
     needs: release-please
-    if: ${{ needs.release-please.outputs.release_created == 'true' }}
-    runs-on: codebuild-madeiramadeira-${{ github.run_id }}-${{ github.run_attempt }}
+    if: ${{ always() && (needs.release-please.outputs.release_created == 'true' || github.event_name == 'workflow_dispatch') }}
+    # O build do frontend (webpack + typecheck) estoura a memória do runner padrão.
+    runs-on:
+      - codebuild-madeiramadeira-${{ github.run_id }}-${{ github.run_attempt }}
+      - instance-size:large
+    env:
+      TAG: ${{ inputs.tag || needs.release-please.outputs.tag_name }}
     steps:
       - uses: actions/checkout@v7.0.1
         with:
-          ref: ${{ needs.release-please.outputs.tag_name }}
+          ref: ${{ env.TAG }}
           persist-credentials: false
 
       # Sem policy_token: o plugin sai sem assinatura (o ID madeiramadeira-* não é assinado pela Grafana),
@@ -53,6 +65,5 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
-          TAG: ${{ needs.release-please.outputs.tag_name }}
           ARCHIVE: ${{ steps.package.outputs.archive }}
           ARCHIVE_SHA1: ${{ steps.package.outputs.archive-sha1sum }}
