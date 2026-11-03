@@ -1,5 +1,38 @@
 # Changelog
 
+## 1.7.2
+
+This release contains only dependency changes.
+* Decrease required Go version to 1.27.2 so that Grafana's internal validator can function
+
+## 1.7.1
+
+This release contains only dependency updates.
+
+* Technical: upgrade Grafana packages to 13.1.8 and plugin-ui to 0.17.8 while retaining React 18
+* Technical: upgrade plugin signing and E2E tools, use Node.js 24 LTS, and remove unnecessary dependency overrides
+* Security: upgrade the Go toolchain to 1.27.3 and update Go dependencies to address reported vulnerabilities
+* Security: update markdown-it to 15.0.3 to fix CVE-2026-111758
+* Security: update DOMPurify, Immutable, js-cookie, Moment, and UUID and remove vulnerable signing-tool dependencies
+
+## 1.7.0
+
+* Fix: [#28](https://github.com/wildmountainfarms/wild-graphql-datasource/issues/28) fixed GraphiQL query editor visibility when editing an alert rule
+* Feature: [#20](https://github.com/wildmountainfarms/wild-graphql-datasource/issues/20) update to GraphiQL version
+* Feature: resizable GraphiQL editor
+* Feature: added "expand editor" button allowing an almost full screen GraphiQL editing experience
+* Data source configuration changes relating to [Migrating from DataSourceHttpSettings component](https://github.com/grafana/plugin-ui/blob/091fdf91af0ac48e138be9eed0e02e0fcefb5517/src/components/ConfigEditor/migrating-from-datasource-http-settings.md)
+* Technical: many dependency updates (as always)
+
+## 1.6.1
+
+Continued updates for Grafana 13 / React 19.
+No real changes since 1.6.0 other than fixing plugin signing.
+
+## 1.6.0
+
+Updates to support Grafana 13. Upgraded GraphiQL dependency.
+
 ## 1.5.1
 
 Fixed regression within the query editor that occurred when constant labels were used.

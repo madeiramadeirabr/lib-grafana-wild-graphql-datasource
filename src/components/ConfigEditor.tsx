@@ -1,65 +1,54 @@
 import React from 'react';
-import {DataSourceHttpSettings} from '@grafana/ui';
-import {DataSourcePluginOptionsEditorProps} from '@grafana/data';
-import {WildGraphQLDataSourceOptions} from '../types';
+import { css } from '@emotion/css';
+import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
+import {
+  AdvancedHttpSettings,
+  Auth,
+  ConfigSection,
+  ConnectionSettings,
+  convertLegacyAuthProps,
+} from '@grafana/plugin-ui';
+import { InlineField, InlineSwitch } from '@grafana/ui';
+import { WildGraphQLDataSourceOptions } from '../types';
 
 interface Props extends DataSourcePluginOptionsEditorProps<WildGraphQLDataSourceOptions> {}
 
-export function ConfigEditor(props: Props) {
-  const { onOptionsChange, options } = props;
-  // const onPathChange = (event: ChangeEvent<HTMLInputElement>) => {
-  //   const jsonData = {
-  //     ...options.jsonData,
-  //     path: event.target.value,
-  //   };
-  //   onOptionsChange({ ...options, jsonData });
-  // };
+// Match plugin-ui's connection, authentication, and advanced HTTP field widths.
+const advancedSettingsClass = css({ maxWidth: 578 });
 
-  // Secure field (only sent to the backend)
-  // const onAPIKeyChange = (event: ChangeEvent<HTMLInputElement>) => {
-  //   onOptionsChange({
-  //     ...options,
-  //     secureJsonData: {
-  //       apiKey: event.target.value,
-  //     },
-  //   });
-  // };
-
-  // const onResetAPIKey = () => {
-  //   onOptionsChange({
-  //     ...options,
-  //     secureJsonFields: {
-  //       ...options.secureJsonFields,
-  //       apiKey: false,
-  //     },
-  //     secureJsonData: {
-  //       ...options.secureJsonData,
-  //       apiKey: '',
-  //     },
-  //   });
-  // };
-
-  // const { jsonData, secureJsonFields } = options;
-  // const secureJsonData = (options.secureJsonData || {}) as WildGraphQLSecureJsonData;
+export function ConfigEditor({ onOptionsChange, options }: Props) {
+  const onUseISODatesChange = (event: React.FormEvent<HTMLInputElement>) => {
+    onOptionsChange({
+      ...options,
+      jsonData: { ...options.jsonData, useISODates: event.currentTarget.checked },
+    });
+  };
 
   return (
     <div className="gf-form-group">
-      <DataSourceHttpSettings
-        defaultUrl="http://localhost:8080"
-        dataSourceConfig={options}
+      <ConnectionSettings
+        config={options}
         onChange={onOptionsChange}
+        urlPlaceholder="http://localhost:8080"
       />
-
-      {/*<InlineField label="API Key" labelWidth={12}>*/}
-      {/*  <SecretInput*/}
-      {/*    isConfigured={(secureJsonFields && secureJsonFields.apiKey) as boolean}*/}
-      {/*    value={secureJsonData.apiKey || ''}*/}
-      {/*    placeholder="secure json field (backend only)"*/}
-      {/*    width={40}*/}
-      {/*    onReset={onResetAPIKey}*/}
-      {/*    onChange={onAPIKeyChange}*/}
-      {/*  />*/}
-      {/*</InlineField>*/}
+      <Auth {...convertLegacyAuthProps({ config: options, onChange: onOptionsChange })} />
+      <ConfigSection
+        title="Advanced settings"
+        className={advancedSettingsClass}
+        isCollapsible
+        isInitiallyOpen={Boolean(
+          options.jsonData.keepCookies?.length || options.jsonData.timeout !== undefined || options.jsonData.useISODates
+        )}
+      >
+        <AdvancedHttpSettings config={options} onChange={onOptionsChange} />
+        <InlineField
+          label="Use ISO 8601 for time"
+          tooltip="When enabled, the from and to variables are sent in ISO 8601 format instead of Unix milliseconds"
+          labelWidth={24}
+        >
+          <InlineSwitch value={options.jsonData.useISODates ?? false} onChange={onUseISODatesChange} />
+        </InlineField>
+      </ConfigSection>
     </div>
   );
 }

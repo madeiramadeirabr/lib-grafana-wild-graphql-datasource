@@ -113,7 +113,11 @@ func (d *Datasource) query(ctx context.Context, req *backend.QueryDataRequest, q
 	}
 
 	// use later: pCtx.AppInstanceSettings.DecryptedSecureJSONData
-	variables, _ := queryvariables.ParseVariables(query, qm.Variables)
+	var jsonData JSONData
+	if err := json.Unmarshal(d.settings.JSONData, &jsonData); err != nil {
+		jsonData.UseISODates = false
+	}
+	variables, _ := queryvariables.ParseVariables(query, qm.Variables, jsonData.UseISODates)
 
 	graphQLRequest := graphql.Request{
 		Query:         qm.QueryText,
@@ -138,7 +142,7 @@ func (d *Datasource) query(ctx context.Context, req *backend.QueryDataRequest, q
 			Status: backend.StatusBadRequest,
 		}, nil
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 	if resp.StatusCode != 200 {
 		return &backend.DataResponse{
 			Error:  errors.New("got non-200 status: " + resp.Status),
@@ -162,7 +166,7 @@ func (d *Datasource) query(ctx context.Context, req *backend.QueryDataRequest, q
 			errorsString += graphQLError.Message
 		}
 		return &backend.DataResponse{
-			Error:  errors.New(fmt.Sprintf("GraphQL response had %d error(s): %s", len(graphQLResponse.Errors), errorsString)),
+			Error:  fmt.Errorf("GraphQL response had %d error(s): %s", len(graphQLResponse.Errors), errorsString),
 			Status: backend.StatusValidationFailed,
 		}, nil
 	}
@@ -178,7 +182,7 @@ func (d *Datasource) query(ctx context.Context, req *backend.QueryDataRequest, q
 
 	// add the frames to the response.
 	for _, parsingOption := range qm.ParsingOptions {
-		frames, err, errorType := parsing.ParseData(
+		frames, errorType, err := parsing.ParseData(
 			graphQLResponse.Data,
 			parsingOption,
 		)
@@ -224,7 +228,7 @@ func (d *Datasource) CheckHealth(ctx context.Context, req *backend.CheckHealthRe
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	graphQLResponse, responseParseError := graphql.ParseGraphQLResponse(resp.Body)
 	if responseParseError != nil {
@@ -262,4 +266,8 @@ func (d *Datasource) CheckHealth(ctx context.Context, req *backend.CheckHealthRe
 		Status:  backend.HealthStatusOk,
 		Message: "Success",
 	}, nil
+}
+
+type JSONData struct {
+	UseISODates bool `json:"useISODates"`
 }

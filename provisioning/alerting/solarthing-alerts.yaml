@@ -16,7 +16,7 @@ groups:
             datasourceUid: fa66cf68-c3d8-4490-a89d-0c3b6a87fff8
             model:
               datasource:
-                type: retrodaredevil-wildgraphql-datasource
+                type: madeiramadeira-wildgraphql-datasource
                 uid: fa66cf68-c3d8-4490-a89d-0c3b6a87fff8
               intervalMs: 1000
               maxDataPoints: 43200

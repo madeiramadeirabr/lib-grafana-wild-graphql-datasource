@@ -6,20 +6,84 @@
 }
 
 
-/*
-Hide the response window only if one if its parents has the hide-execute-button class
-.graphiql-response ~ :not(.graphiql-response)
-  selects the parent of any div with the graphiql-response class
-*/
-.hide-execute-button div:has(> .graphiql-response) {
-  display: none !important; /* Important is necessary because the div element we are trying to select explicitly has its display set to flex*/
+/* Hide only the response pane during alerting. Its parent also contains the query and variables editors. */
+.hide-execute-button .graphiql-response {
+  display: none !important;
 }
 
+/* Grafana manages queries, so each embedded editor should keep a single tab. */
+.wild-graphql-query-editor .graphiql-tab-add {
+  display: none;
+}
 
-/*
-Until either https://github.com/grafana/grafana/issues/85044 is fixed or https://github.com/graphql/graphiql/issues/3565
-is fixed, we need to disable pointer events for any info tooltips that have "javascript:void 0" as their href.
-*/
-/*.CodeMirror-info a {*/
-/*  pointer-events: none;*/
-/*}*/
+/* Below CSS allows the "Expand editor" button to work */
+
+/* Keep GraphiQL mounted in the same place in both layouts to preserve undo history. */
+.wild-graphql-editor-dialog {
+  display: flex;
+  flex-direction: column;
+  position: static;
+  width: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: inherit;
+}
+
+.wild-graphql-editor-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  flex-shrink: 0;
+  padding-bottom: 8px;
+}
+
+.wild-graphql-editor-container {
+  height: 450px;
+  min-height: 450px;
+  resize: vertical;
+  overflow: hidden;
+}
+
+.wild-graphql-editor-dialog.is-expanded {
+  position: fixed;
+  z-index: 1060;
+  inset: 0;
+  width: 90vw;
+  height: 85vh;
+  margin: auto;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgb(0 0 0 / 40%);
+}
+
+.wild-graphql-editor-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  background: rgb(0 0 0 / 60%);
+}
+
+/* Override the inline height written by native resizing only while expanded. */
+.wild-graphql-editor-dialog.is-expanded .wild-graphql-editor-container {
+  flex: 1;
+  height: auto !important;
+  min-height: 0;
+  resize: none;
+}
+
+/* GraphiQL portals must appear above the expanded editor, including in Grafana. */
+.wild-graphql-editor-expanded .graphiql-dialog-overlay {
+  z-index: 1070;
+}
+
+.wild-graphql-editor-expanded .graphiql-dialog {
+  z-index: 1080;
+}
+
+.wild-graphql-editor-expanded .graphiql-tooltip,
+.wild-graphql-editor-expanded .graphiql-dropdown-content {
+  z-index: 1090;
+}

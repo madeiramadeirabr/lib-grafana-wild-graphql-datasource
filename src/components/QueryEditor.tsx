@@ -1,5 +1,5 @@
-import React, { ChangeEvent, KeyboardEvent, useEffect, useMemo, useRef } from 'react';
-import { Button, Checkbox, Combobox, IconButton, InlineField, Input, TextArea } from '@grafana/ui';
+import React, { ChangeEvent, KeyboardEvent, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { Button, Checkbox, Combobox, IconButton, InlineField, Input, TextArea, useTheme2 } from '@grafana/ui';
 import { CoreApp, QueryEditorProps } from '@grafana/data';
 import { DataSource } from '../datasource';
 import {
@@ -14,24 +14,25 @@ import {
 } from '../types';
 import { GraphiQLInterface } from 'graphiql';
 import {
-  EditorContextProvider,
-  ExecutionContextProvider,
-  ExplorerContextProvider,
-  PluginContextProvider,
-  SchemaContextProvider,
-  useEditorContext,
+  GraphiQLProvider,
+  useGraphiQL,
+  useGraphiQLActions,
 } from '@graphiql/react';
-import { Fetcher } from '@graphiql/toolkit';
-import { FetcherOpts, FetcherParams } from '@graphiql/toolkit/src/create-fetcher/types';
+import { DOC_EXPLORER_PLUGIN, DocExplorerStore } from '@graphiql/plugin-doc-explorer';
+import { explorerPlugin } from '@graphiql/plugin-explorer';
+import type { Fetcher, FetcherOpts, FetcherParams, Storage } from '@graphiql/toolkit';
 import { getBackendSrv, getTemplateSrv } from '@grafana/runtime';
 import { firstValueFrom } from 'rxjs';
 
-import 'graphiql/graphiql.css';
+import '../monacoWorkers';
+import 'graphiql/style.css';
+import '@graphiql/plugin-explorer/style.css';
 import './modify_graphiql.css';
-import { ExecutionResult } from 'graphql-ws';
+import { ExecutionResult } from 'graphql';
+
 import { getInterpolatedAutoPopulatedVariables, interpolateVariables } from '../variables';
 
-type Props = QueryEditorProps<DataSource, WildGraphQLAnyQuery, WildGraphQLDataSourceOptions>;
+export type Props = QueryEditorProps<DataSource, WildGraphQLAnyQuery, WildGraphQLDataSourceOptions>;
 interface InnerQueryProps {
   query: WildGraphQLAnyQuery
   onChange: (value: WildGraphQLAnyQuery) => void,
@@ -55,7 +56,7 @@ const INPUT_WIDTH = 48;
  * One key difference here is that it is expected that all variables populated automatically by the backend
  * are also automatically populated by this method, using
  */
-function createFetcher(url: string, withCredentials: boolean, basicAuth?: string): Fetcher  {
+function createFetcher(url: string, withCredentials: boolean, basicAuth?: string, useISODates = false): Fetcher {
   const headers: Record<string, any> = {
     Accept: 'application/json',
     'Content-Type': 'application/json',
@@ -70,8 +71,8 @@ function createFetcher(url: string, withCredentials: boolean, basicAuth?: string
   const templateSrv = getTemplateSrv();
   return async (graphQLParams: FetcherParams, opts?: FetcherOpts) => {
     const variables = {
-      ...getInterpolatedAutoPopulatedVariables(templateSrv),
-      ...interpolateVariables(graphQLParams.variables, templateSrv), // remember one of the downsides here is that we cannot pass scopedVars here because we don't have access to it
+      ...getInterpolatedAutoPopulatedVariables(templateSrv, useISODates),
+      ...interpolateVariables(graphQLParams.variables ?? {}, templateSrv), // remember one of the downsides here is that we cannot pass scopedVars here because we don't have access to it
     };
     const query = {
       ...graphQLParams,
@@ -99,9 +100,10 @@ export function QueryEditor(props: Props) {
     return createFetcher(
       datasource.settings.url!,
       datasource.settings.withCredentials ?? false,
-      datasource.settings.basicAuth
+      datasource.settings.basicAuth,
+      datasource.settings.jsonData.useISODates
     );
-  }, [datasource.settings.url, datasource.settings.withCredentials, datasource.settings.basicAuth]);
+  }, [datasource.settings.url, datasource.settings.withCredentials, datasource.settings.basicAuth, datasource.settings.jsonData.useISODates]);
 
   // *sometimes* and only sometimes when creating a new panel the query won't be populated with the default query.
   //   When that happens any assumption we make about the presence of fields of query, we get an NPE.
@@ -114,61 +116,135 @@ export function QueryEditor(props: Props) {
     ...(query as Partial<WildGraphQLAnyQuery>), // cast to partial to make compiler point out missing fields
   };
 
+  const noopStorage = useMemo<Storage>(() => ({
+    getItem: () => null,
+    setItem: () => {},
+    removeItem: () => {},
+    clear: () => {},
+    length: 0,
+  }), []);
+  const plugins = useMemo(() => [DOC_EXPLORER_PLUGIN, explorerPlugin()], []);
+
   return (
-    <>
-      {/*By not providing storage, history contexts, they won't be used*/}
-      {/*<StorageContextProvider storage={DummyStorage}>*/}
-      {/*  <HistoryContextProvider maxHistoryLength={0}>*/}
-      <EditorContextProvider
-        // defaultQuery is the query that is used for new tabs, but we already define the open tabs here
-        defaultTabs={[{
-          query: correctedQuery.queryText,
-          // NOTE: For some reason if you specify variable here, it just doesn't work...
-        }]}
-        variables={getQueryVariablesAsJsonString(query)}
-        // we don't need to pass onEditOperationName here because we have a callback that handles it ourselves
-      >
-        <SchemaContextProvider fetcher={fetcher}>
-          <ExecutionContextProvider
-            fetcher={fetcher}
-            // NOTE: We don't pass the operationName here because when the user presses the run button,
-            //   we want them to always have to choose which operation they want
-          >
-            <ExplorerContextProvider> {/*Explorer context needed for documentation*/}
-              <PluginContextProvider>
-                {/*We need to hide the execute button and response window during alerting because the to and from variables are not populated correctly*/}
-                <div className={isAlerting ? "hide-execute-button" : ""}>
-                  <InnerQueryEditor
-                    query={correctedQuery}
-                    onChange={props.onChange}
-                    app={props.app}
-                  />
-                </div>
-              </PluginContextProvider>
-            </ExplorerContextProvider>
-          </ExecutionContextProvider>
-        </SchemaContextProvider>
-      </EditorContextProvider>
-    </>
+    <GraphiQLProvider
+      storage={noopStorage}
+      fetcher={fetcher}
+      initialQuery={correctedQuery.queryText}
+      initialVariables={getQueryVariablesAsJsonString(correctedQuery)}
+      plugins={plugins}
+      referencePlugin={DOC_EXPLORER_PLUGIN}
+    >
+      <DocExplorerStore>
+        {/* Hide execution during alerting because the to and from variables are not populated correctly. */}
+        <div className={isAlerting ? "hide-execute-button" : ""}>
+          <InnerQueryEditor
+            query={correctedQuery}
+            onChange={props.onChange}
+            app={props.app}
+          />
+        </div>
+      </DocExplorerStore>
+    </GraphiQLProvider>
   );
 }
 
+export default QueryEditor;
+
 function InnerQueryEditor({ query, onChange, app }: InnerQueryProps) {
   const isBackendOnlyQuery = app === CoreApp.CloudAlerting || app === CoreApp.UnifiedAlerting;
-  const editorContext = useEditorContext();
+  const currentOperationName = useGraphiQL((state) => state.operationName);
+  const hasParsedOperations = useGraphiQL((state) => state.operations !== undefined);
+  const { setOperationName } = useGraphiQLActions();
   const labelToAddRef = useRef<HTMLInputElement>(null);
+  const theme = useTheme2();
+  const editorDialogRef = useRef<HTMLDivElement>(null);
+  const [isEditorExpanded, setEditorExpanded] = useState(false);
+
+  useEffect(() => {
+    const containEscape = (event: globalThis.KeyboardEvent) => {
+      if (event.key !== 'Escape' || !(event.target instanceof Element)) {
+        return;
+      }
+      if (event.target.closest('.graphiql-dialog, .graphiql-dropdown-content')) {
+        // Radix also listens on document in the capture phase. Let its listener
+        // dismiss the popup, but stop Escape before Grafana's bubbling shortcut.
+        // React handlers run too late: Radix can already have unmounted the popup.
+        event.stopPropagation();
+        return;
+      }
+      if (isEditorExpanded && !editorDialogRef.current?.contains(event.target)) {
+        // Closing a GraphiQL popup can leave focus on document.body without a
+        // focusin event. Escape must still close the expanded editor first.
+        event.stopPropagation();
+        event.preventDefault();
+        setEditorExpanded(false);
+      }
+    };
+    document.addEventListener('keydown', containEscape, true);
+    return () => document.removeEventListener('keydown', containEscape, true);
+  }, [isEditorExpanded]);
+
+  useEffect(() => {
+    if (!isEditorExpanded) {
+      return;
+    }
+
+    const dialog = editorDialogRef.current!;
+    const previousFocus = document.activeElement as HTMLElement | null;
+    const previousOverflow = document.body.style.overflow;
+    let tabBackwards = false;
+    const focusableElements = () => Array.from(dialog.querySelectorAll<HTMLElement>(
+      'button, input, textarea, select, a[href], [tabindex]'
+    )).filter((element) => element.tabIndex >= 0 && !element.matches(':disabled') && element.getClientRects().length > 0);
+    const rememberTabDirection = (event: globalThis.KeyboardEvent) => {
+      if (event.key === 'Tab') {
+        tabBackwards = event.shiftKey;
+      }
+    };
+    const containFocus = (event: FocusEvent) => {
+      const target = event.target;
+      if (!(target instanceof Element) || dialog.contains(target)) {
+        return;
+      }
+      // GraphiQL renders these controls in portals outside the editor's DOM tree.
+      if (target.closest('.graphiql-dialog, .graphiql-dropdown-content')) {
+        return;
+      }
+      const elements = focusableElements();
+      (tabBackwards ? elements[elements.length - 1] : elements[0])?.focus();
+    };
+    document.body.style.overflow = 'hidden';
+    document.body.classList.add('wild-graphql-editor-expanded');
+    document.addEventListener('keydown', rememberTabDirection, true);
+    document.addEventListener('focusin', containFocus);
+    focusableElements()[0]?.focus();
+    return () => {
+      document.removeEventListener('keydown', rememberTabDirection, true);
+      document.removeEventListener('focusin', containFocus);
+      document.body.classList.remove('wild-graphql-editor-expanded');
+      document.body.style.overflow = previousOverflow;
+      previousFocus?.focus({ preventScroll: true });
+    };
+  }, [isEditorExpanded]);
+
+  // GraphiQL 5 registers its query-change listener when Monaco initializes and
+  //   retains that render's onEditQuery callback.
+  //   Spreading the captured query can overwrite newer fields, including operationName.
+  //   Read the latest committed props through a ref so even the retained callback uses current values.
+  //   Upstream should refresh the onEdit listener when the callback changes,
+  //   separately from editor creation, or forward calls to the latest callback.
+  const latestQueryPropsRef = useRef({ query, onChange });
+  useLayoutEffect(() => {
+    latestQueryPropsRef.current = { query, onChange };
+  }, [query, onChange]);
+  const onEditQuery = useCallback((value: string) => {
+    const latest = latestQueryPropsRef.current;
+    latest.onChange({ ...latest.query, queryText: value });
+  }, []);
 
   const onOperationNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newOperationName = event.target.value || undefined;
-    const queryEditor = editorContext?.queryEditor;
-    if (queryEditor) {
-      // We don't use editorContext.setOperationName because that function does not accept null values for some reason
-      // Note to future me - if you need to look at the source of setOperationName, search everywhere for `'setOperationName'` in the graphiql codebase
-      // NOTE: I'm not sure if setting this value actually does anything
-      queryEditor.operationName = newOperationName ?? null;
-    }
-    // by updating the active tab values, we are able to switch the "active operation" to whatever the user has just typed out
-    editorContext?.updateActiveTabValues({operationName: newOperationName})
+    setOperationName(newOperationName ?? "");
     onChange({ ...query, operationName: newOperationName });
   };
 
@@ -388,44 +464,72 @@ function InnerQueryEditor({ query, onChange, app }: InnerQueryProps) {
   //   });
   // };
 
-  const currentOperationName = editorContext?.queryEditor?.operationName;
   useEffect(() => {
     // if currentOperationName is null, that means that the query is unnamed
-    // currentOperationName should never be undefined unless queryEditor is undefined
     // Treat an empty, null, or undefined operation name the same.
     //   We need to do this because otherwise we are constantly doing onChange calls, which results in 100% CPU utilization
     if (
-      currentOperationName !== undefined
+      hasParsedOperations
       && (query.operationName || undefined) !== (currentOperationName || undefined)
     ) {
       // Remember that in our world, we use the string | undefined type for operationName,
       //   so we're basically converting null to undefined here
       onChange({ ...query, operationName: currentOperationName || undefined });
     }
-  }, [onChange, query, currentOperationName]);
-
+  }, [onChange, query, currentOperationName, hasParsedOperations]);
 
   return (
     <>
       <h3 className="page-heading">Query</h3>
       <div className="gf-form-group">
-        <div className="gf-form" style={{height: "450px"}}>
-          {/*TODO allow this to be resized*/}
-          <GraphiQLInterface
-            showPersistHeadersSettings={false}
-            disableTabs={true}
-            isHeadersEditorEnabled={false} // TODO consider enabling customizable headers later
-            onEditQuery={(value) => {
-              onChange({...query, queryText: value});
-            }}
-            onEditVariables={(variablesJsonString) => {
-              if (variablesJsonString.trimStart()) {
-                onChange({...query, variables: variablesJsonString});
-              } else {
-                onChange({...query, variables: undefined});
+        {isEditorExpanded && <div
+          className="wild-graphql-editor-backdrop"
+          aria-hidden="true"
+          onClick={() => setEditorExpanded(false)}
+        />}
+        <div
+          ref={editorDialogRef}
+          className={`wild-graphql-editor-dialog${isEditorExpanded ? " is-expanded" : ""}`}
+          style={{ background: theme.colors.background.primary }}
+          role={isEditorExpanded ? 'dialog' : 'presentation'}
+          aria-label={isEditorExpanded ? 'Query editor' : undefined}
+          aria-modal={isEditorExpanded || undefined}
+          onKeyDown={(event) => {
+            if (isEditorExpanded && event.key === 'Escape' && event.currentTarget.contains(event.target as Node)) {
+              // Monaco gets first chance to dismiss suggestions. Keep Escape
+              // from also triggering Grafana's shortcut to leave the panel editor.
+              event.stopPropagation();
+              if (!event.defaultPrevented) {
+                event.preventDefault();
+                setEditorExpanded(false);
               }
-            }}
-          />
+            }
+          }}
+        >
+          <div className="wild-graphql-editor-toolbar">
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => setEditorExpanded(!isEditorExpanded)}
+            >
+              {isEditorExpanded ? 'Close expanded editor' : 'Expand editor'}
+            </Button>
+          </div>
+          <div className="gf-form wild-graphql-editor-container">
+            <GraphiQLInterface
+              className="wild-graphql-query-editor"
+              showPersistHeadersSettings={false}
+              isHeadersEditorEnabled={false} // TODO consider enabling customizable headers later
+              onEditQuery={onEditQuery}
+              onEditVariables={(variablesJsonString) => {
+                if (variablesJsonString.trimStart()) {
+                  onChange({...query, variables: variablesJsonString});
+                } else {
+                  onChange({...query, variables: undefined});
+                }
+              }}
+            />
+          </div>
         </div>
         <div className="gf-form-inline">
           <InlineField label="Operation Name" labelWidth={LABEL_WIDTH}

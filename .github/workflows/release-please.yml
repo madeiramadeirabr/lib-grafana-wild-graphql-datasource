@@ -1,0 +1,58 @@
+# Versionamento do fork: X.Y.Z-sp.N (versioning "service-pack" do release-please), onde X.Y.Z é a versão
+# do upstream (wildmountainfarms/wild-graphql-datasource) e sp.N conta as releases da MadeiraMadeira sobre ela.
+#   - Qualquer release nossa sobe só o N, seja qual for o tipo de commit: 1.7.2-sp.1 -> 1.7.2-sp.2
+#   - Ao sincronizar com uma versão nova do upstream, use no commit o rodapé "Release-As: 1.8.0-sp.1"
+#
+# O build do zip roda aqui mesmo: releases criadas com o GITHUB_TOKEN não disparam outros workflows.
+name: Release Please
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: codebuild-madeiramadeira-${{ github.run_id }}-${{ github.run_attempt }}
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+    steps:
+      - uses: googleapis/release-please-action@v5.0.0
+        id: release
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+  build-plugin:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created == 'true' }}
+    runs-on: codebuild-madeiramadeira-${{ github.run_id }}-${{ github.run_attempt }}
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          ref: ${{ needs.release-please.outputs.tag_name }}
+          persist-credentials: false
+
+      # Sem policy_token: o plugin sai sem assinatura (o ID madeiramadeira-* não é assinado pela Grafana),
+      # e o Grafana precisa dele em allow_loading_unsigned_plugins.
+      - uses: grafana/plugin-actions/package-plugin@package-plugin/v2.0.1
+        id: package
+        env:
+          PLUGIN_VALIDATOR_OSV_CONFIG: ${{ github.workspace }}/osv-scanner.toml
+        with:
+          go-version: '1.27.3'
+          node-version: '24'
+
+      - name: Anexa o zip e o sha1 à release
+        run: gh release upload "$TAG" "$ARCHIVE" "$ARCHIVE_SHA1" --clobber
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ needs.release-please.outputs.tag_name }}
+          ARCHIVE: ${{ steps.package.outputs.archive }}
+          ARCHIVE_SHA1: ${{ steps.package.outputs.archive-sha1sum }}
