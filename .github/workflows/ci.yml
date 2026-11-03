@@ -161,7 +161,10 @@ jobs:
       matrix:
         GRAFANA_IMAGE: ${{fromJson(needs.resolve-versions.outputs.matrix)}}
     name: e2e test ${{ matrix.GRAFANA_IMAGE.name }}@${{ matrix.GRAFANA_IMAGE.VERSION }}
-    runs-on: codebuild-madeiramadeira-${{ github.run_id }}-${{ github.run_attempt }}
+    # Grafana 13 + Chromium + Playwright não cabem com folga no runner padrão.
+    runs-on:
+      - codebuild-madeiramadeira-${{ github.run_id }}-${{ github.run_attempt }}
+      - instance-size:large
     steps:
       - uses: actions/checkout@v7.0.1
         with:

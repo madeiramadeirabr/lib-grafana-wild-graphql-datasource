@@ -20,6 +20,9 @@ services:
       - ./provisioned-dashboards:/provisioned-dashboards:ro
     environment:
       GF_LOG_LEVEL: info
+      # Grafana 13 instala em background vários apps do catálogo (pyroscope, advisor, drilldown...) ao subir,
+      # o que deixa o e2e lento/instável no CI. O plugin não depende deles.
+      GF_PLUGINS_PREINSTALL_DISABLED: "true"
     extends:
       file: .config/docker-compose-base.yaml
       service: grafana
